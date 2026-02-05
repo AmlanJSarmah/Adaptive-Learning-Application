@@ -3,3 +3,5 @@ model_api/model_venv/
 api/node_modules
 
 api/dist
+
+api/.idea
