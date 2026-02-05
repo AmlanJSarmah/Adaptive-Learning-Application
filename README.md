@@ -31,3 +31,25 @@ pip install -r requirements.txt
 ```
 
 Finally run the `predict_level.py` file. This will start the development server.  
+
+## Setting up the Typescript API (for auth, database connection etc)
+
+Installed the packages in `package.json`
+```
+npm i
+```
+
+To start the development server
+```
+npm run start
+```
+
+To compile the Typescript file (production)
+```
+npm run build
+```
+
+To run production version
+```
+npm run start
+```
