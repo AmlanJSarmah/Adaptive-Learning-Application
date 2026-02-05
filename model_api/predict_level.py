@@ -34,6 +34,5 @@ def predict():
     res = model.predict(features)
     return jsonify({"Message": "Success", "IsReady" : int(res[0])}) , 201
 
-
 if __name__ == '__main__':
     app.run(debug=True)
