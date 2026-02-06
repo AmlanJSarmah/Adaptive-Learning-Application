@@ -13,7 +13,14 @@ import { connectToDB } from './server.ts';
 const PORT = process.env.PORT || 8080;
 const app = express();
 
-connectToDB();
+connectToDB()
+  .then(() => {
+    console.log('Connected to DB...');
+  })
+  .catch((err: Error) => {
+    console.error(err);
+    process.exit(1);
+  });
 
 app.use(express.json());
 app.use(cors());
