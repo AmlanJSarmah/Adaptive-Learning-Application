@@ -5,3 +5,5 @@ api/node_modules/
 api/dist/
 
 .idea/
+
+.env

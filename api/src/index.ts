@@ -6,9 +6,14 @@ import type {
   NextFunction,
 } from 'express';
 import cors from 'cors';
+import 'dotenv/config';
 import authRouter from './routes/authRoutes.ts';
+import { connectToDB } from './server.ts';
 
+const PORT = process.env.PORT || 8080;
 const app = express();
+
+connectToDB();
 
 app.use(express.json());
 app.use(cors());
@@ -27,6 +32,6 @@ app.use(
   }
 );
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
   console.log('Server started!');
 });
