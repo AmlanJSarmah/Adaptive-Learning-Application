@@ -7,3 +7,5 @@ api/dist/
 .idea/
 
 .env
+
+tsconfig.tsbuildinfo

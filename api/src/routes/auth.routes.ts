@@ -1,9 +1,7 @@
 import express from 'express';
-import type { Request, Response } from 'express';
+import { handleUserSignup } from '../controllers/auth.controller.js';
 const router = express.Router();
 
-router.use('/signup', (req: Request, res: Response) => {
-  res.status(200).send({ message: 'Sign up successful' });
-});
+router.post('/signup', handleUserSignup);
 
 export default router;
