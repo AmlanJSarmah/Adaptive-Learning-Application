@@ -5,22 +5,18 @@ import type {
   Response,
   NextFunction,
 } from 'express';
+// CORS
 import cors from 'cors';
+// ENV
 import 'dotenv/config';
-import authRouter from './routes/authRoutes.ts';
-import { connectToDB } from './server.ts';
+import './config/env.js';
+import { env } from './config/env.js';
+// DB
+import { connectToDB } from './config/db.js';
+// Routes
+import authRouter from './routes/auth.routes.js';
 
-const PORT = process.env.PORT || 8080;
 const app = express();
-
-connectToDB()
-  .then(() => {
-    console.log('Connected to DB...');
-  })
-  .catch((err: Error) => {
-    console.error(err);
-    process.exit(1);
-  });
 
 app.use(express.json());
 app.use(cors());
@@ -39,6 +35,9 @@ app.use(
   }
 );
 
-app.listen(PORT, () => {
-  console.log('Server started!');
-});
+(async () => {
+  await connectToDB();
+  app.listen(env.PORT, () => {
+    console.log(`Server running on ${env.PORT}`);
+  });
+})();
