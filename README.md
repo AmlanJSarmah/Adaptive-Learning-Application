@@ -44,6 +44,7 @@ In the `api` directory, create a `.env` file with the values
 PORT=number
 DATABASE_URL="database_url"
 PASSWORD_SALT=12
+JWT_SECRET="256 bits string"
 ```
 
 To start the development server
