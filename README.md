@@ -39,6 +39,13 @@ Installed the packages in `package.json`
 npm i
 ```
 
+In the `api` directory, create a `.env` file with the values
+```
+PORT=number
+DATABASE_URL="database_url"
+PASSWORD_SALT=12
+```
+
 To start the development server
 ```
 npm run start
