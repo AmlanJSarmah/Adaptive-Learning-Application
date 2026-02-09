@@ -9,3 +9,5 @@ api/dist/
 .env
 
 tsconfig.tsbuildinfo
+
+.mypy_cache/
