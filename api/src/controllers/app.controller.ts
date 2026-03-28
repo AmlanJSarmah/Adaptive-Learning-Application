@@ -1,4 +1,6 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import userModel from '../models/user.model.js';
+import { resultsSchema } from '../schemas/results.schema.js';
 
 type MathProblem = {
   question: string;
@@ -312,7 +314,72 @@ export const fetchEnglishProblems = (req: Request, res: Response) => {
     return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  const problems = Array.from({ length: 5 }, () => generateEnglishProblem(grade));
+  const problems = Array.from({ length: 5 }, () =>
+    generateEnglishProblem(grade)
+  );
 
   return res.status(200).json({ grade, problems });
+};
+
+export const getResults = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userName =
+      req.authenticatedUser?.userName ??
+      (req.authenticatedUser as { name?: string } | undefined)?.name;
+    if (!userName) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const parsedResults = resultsSchema.parse(req.body);
+    const { correctness, time_taken, attempts } = parsedResults;
+
+    const user = await userModel.findOneAndUpdate(
+      { name: userName },
+      {
+        correctness,
+        timeTakenPerQuestion: time_taken,
+        attemptsPerQuestion: attempts,
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const predictResponse = await fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(parsedResults),
+    });
+
+    if (!predictResponse.ok) {
+      return res.status(502).json({ message: 'Prediction service failed' });
+    }
+
+    const predictBody = await predictResponse.json();
+
+    const isReady = predictBody.IsReady as number;
+
+    if (isReady == 0) {
+      return res
+        .status(200)
+        .json({ message: 'You will have to practice more' });
+    }
+
+    await userModel.updateOne(
+      { name: userName },
+      { studentClass: user.studentClass + 1 }
+    );
+
+    return res
+      .status(200)
+      .json({ message: 'Congratulations! you are promoted' });
+  } catch (error) {
+    next(error);
+  }
 };

@@ -30,7 +30,12 @@ function Login() {
         }),
       });
 
-      let data: { message?: string; token?: string; user?: string } = {};
+      let data: {
+        message?: string;
+        token?: string;
+        user?: string;
+        studentClass?: number;
+      } = {};
       try {
         data = await response.json();
       } catch (error) {
@@ -44,6 +49,9 @@ function Login() {
           localStorage.setItem("token", data.token);
         } else {
           localStorage.removeItem("token");
+        }
+        if (data.studentClass !== undefined) {
+          localStorage.setItem("studentClass", String(data.studentClass));
         }
         alert(data.message ?? "Login successful");
         navigate("/");
