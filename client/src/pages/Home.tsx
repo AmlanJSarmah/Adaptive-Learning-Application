@@ -2,10 +2,25 @@ import './Home.css';
 import mathImage from '../../assets/math-removebg-preview.png';
 import literatureImage from '../../assets/literature-removebg-preview.png';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Home() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token');
+
+    setIsLoggedIn(storedLoggedIn);
+    setUser(storedUser);
+    setToken(storedToken);
+  }, []);
+
+  const mathTarget = isLoggedIn ? '/math' : '/signup';
+  const englishTarget = isLoggedIn ? '/english' : '/signup';
   return (
     <div className="home">
       <header className="home__header">
@@ -20,13 +35,13 @@ function Home() {
         </div>
 
         <div className="home__actions">
-          <button className="home__button" type="button">
+          <Link className="home__button" to={mathTarget}>
             Learn Math
-          </button>
-          <button className="home__button" type="button">
+          </Link>
+          <Link className="home__button" to={englishTarget}>
             Learn English
-          </button>
-          {!loggedIn ? (
+          </Link>
+          {!isLoggedIn ? (
             <>
               <Link to="/signup" className="home__button" type="button">
                 Sign up

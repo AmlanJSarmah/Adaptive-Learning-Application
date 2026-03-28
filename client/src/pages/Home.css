@@ -112,6 +112,14 @@ body {
   margin-top: 6px;
 }
 
+.home__page {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #6f66a5;
+  margin: 40px auto 0;
+}
+
 .home__button {
   width: min(280px, 85vw);
   padding: 12px 0;

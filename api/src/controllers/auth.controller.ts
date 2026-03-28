@@ -48,9 +48,11 @@ export const handleUserLogin = async (
         env.JWT_SECRET,
         { expiresIn: '1hr' }
       );
-      res
-        .status(200)
-        .json({ message: 'User Logged in Successful', token: token });
+      res.status(200).json({
+        message: 'User Logged in Successful',
+        token: token,
+        user: user.name,
+      });
     } else throw new AppError(401, "User doesn't exist");
   } catch (err) {
     next(err);
