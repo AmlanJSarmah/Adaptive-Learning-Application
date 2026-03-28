@@ -1,11 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import {
-  userSignUpSchema,
-  userSignInSchema,
-  authHeaderSchema,
-} from '../schemas/auth.schema.js';
+import { userSignUpSchema, userSignInSchema } from '../schemas/auth.schema.js';
 import userModel from '../models/user.model.js';
 import { AppError } from '../utils/error.js';
 import { env } from '../config/env.js';
