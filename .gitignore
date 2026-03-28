@@ -2,6 +2,10 @@ model_api/model_venv/
 
 api/node_modules/
 
+client/node_modules/
+
+client/Design/
+
 api/dist/
 
 .idea/
