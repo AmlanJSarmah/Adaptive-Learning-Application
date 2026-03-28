@@ -10,7 +10,3 @@ export const userSignInSchema = z.object({
   name: z.string(),
   password: z.string(),
 });
-
-export const authHeaderSchema = z
-  .string()
-  .regex(/^Bearer\s.+$/, 'Invalid Authorization header');

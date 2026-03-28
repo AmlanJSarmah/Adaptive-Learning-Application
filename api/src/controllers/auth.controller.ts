@@ -44,6 +44,7 @@ export const handleUserLogin = async (
       const token = jwt.sign(
         {
           userName: reqBodyParsed.name,
+          studentClass: user.studentClass,
         },
         env.JWT_SECRET,
         { expiresIn: '1hr' }
