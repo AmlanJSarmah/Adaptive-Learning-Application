@@ -12,6 +12,7 @@ type StoredResults = {
 function Results() {
   const navigate = useNavigate();
   const [data, setData] = useState<StoredResults | null>(null);
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const raw = localStorage.getItem("testResults");
@@ -34,6 +35,46 @@ function Results() {
     return data.results.reduce((sum, value) => sum + value, 0);
   }, [data]);
 
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    const sendResults = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/app/results", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+          body: JSON.stringify({
+            correctness: data.results,
+            attempts: data.attempts,
+            time_taken: data.timeTaken,
+          }),
+        });
+        let payload: { message?: string } = {};
+        try {
+          payload = await response.json();
+        } catch (error) {
+          payload = {};
+        }
+        if (payload.message) {
+          setServerMessage(payload.message);
+        } else if (response.ok) {
+          setServerMessage("Results submitted");
+        } else {
+          setServerMessage("Unable to submit results.");
+        }
+      } catch (error) {
+        setServerMessage("Unable to submit results.");
+      }
+    };
+
+    sendResults();
+  }, [data]);
+
   if (!data) {
     return null;
   }
@@ -46,6 +87,9 @@ function Results() {
       <main className="home__body">
         <div className="home__page">
           {data.subject} Results
+          <div className="home__summary">
+            {serverMessage ?? "Submitting results..."}
+          </div>
           <div className="home__summary">
             Correct answers: {correctCount} / {data.results.length}
           </div>

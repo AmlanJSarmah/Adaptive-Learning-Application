@@ -1,6 +1,6 @@
-import "./Home.css";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import './Home.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type Problem = {
   question: string;
@@ -22,17 +22,22 @@ function English() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const lastAttemptKey = useRef<string | null>(null);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedClass = localStorage.getItem("studentClass");
+    if (hasFetched.current) {
+      return;
+    }
+    hasFetched.current = true;
+    const token = localStorage.getItem('token');
+    const storedClass = localStorage.getItem('studentClass');
     setStudentClass(storedClass);
 
     const load = async () => {
       try {
-        const response = await fetch("http://localhost:8080/app/english", {
+        const response = await fetch('http://localhost:8080/app/english', {
           headers: {
-            Authorization: token ? `Bearer ${token}` : "",
+            Authorization: token ? `Bearer ${token}` : '',
           },
         });
         const data = await response.json();
@@ -41,7 +46,7 @@ function English() {
           : [];
 
         if (!response.ok || loadedProblems.length === 0) {
-          setError("Unable to load questions.");
+          setError('Unable to load questions.');
           setLoading(false);
           return;
         }
@@ -49,7 +54,7 @@ function English() {
         setProblems(loadedProblems.slice(0, 5));
         setLoading(false);
       } catch (err) {
-        setError("Unable to load questions.");
+        setError('Unable to load questions.');
         setLoading(false);
       }
     };
@@ -78,7 +83,7 @@ function English() {
     }
     lastAttemptKey.current = attemptKey;
     setStartTime(Date.now());
-    setAttempts((prev) => {
+    setAttempts(prev => {
       const next = [...prev];
       next[activeIndex] = next[activeIndex] + 1;
       return next;
@@ -91,21 +96,21 @@ function English() {
       ? Math.max(1, Math.round((now - startTime) / 1000))
       : 1;
 
-    setResults((prev) => {
+    setResults(prev => {
       const next = [...prev];
       next[activeIndex] = isCorrect ? 1 : 0;
       return next;
     });
-    setTimeTaken((prev) => {
+    setTimeTaken(prev => {
       const next = [...prev];
       next[activeIndex] = elapsedSeconds;
       return next;
     });
 
     if (isReview) {
-      setReviewQueue((prev) => prev.slice(1));
+      setReviewQueue(prev => prev.slice(1));
     } else {
-      setCurrentIndex((prev) => prev + 1);
+      setCurrentIndex(prev => prev + 1);
     }
   };
 
@@ -123,7 +128,7 @@ function English() {
   const handleReattempt = () => {
     const wrongIndexes = results
       .map((value, index) => (value === 0 ? index : -1))
-      .filter((value) => value !== -1);
+      .filter(value => value !== -1);
     if (wrongIndexes.length === 0) {
       handleSubmit();
       return;
@@ -135,15 +140,15 @@ function English() {
 
   const handleSubmit = () => {
     localStorage.setItem(
-      "testResults",
+      'testResults',
       JSON.stringify({
-        subject: "English",
+        subject: 'English',
         results,
         timeTaken,
         attempts,
       })
     );
-    navigate("/results");
+    navigate('/results');
   };
 
   useEffect(() => {
@@ -151,7 +156,7 @@ function English() {
     if (!isComplete && !reviewDone) {
       return;
     }
-    const hasWrong = results.some((value) => value === 0);
+    const hasWrong = results.some(value => value === 0);
     if (!hasWrong) {
       handleSubmit();
     }

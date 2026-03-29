@@ -323,7 +323,7 @@ const openAiEnglishSchema = z.object({
     .length(5),
 });
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const createOpenAiResponse = async (
   prompt: string,
@@ -519,12 +519,10 @@ export const getResults = async (
       return res.status(502).json({ message: 'Prediction service failed' });
     }
 
-    const predictBody = (await predictResponse.json()) as {
-      isReady?: number | boolean;
-    };
-    const isReady = Number(predictBody?.isReady) === 1;
+    const predictBody = await predictResponse.json();
+    const isReady = predictBody.IsReady as number;
 
-    if (!isReady) {
+    if (isReady == 0) {
       return res
         .status(200)
         .json({ message: 'You will have to practice more' });
