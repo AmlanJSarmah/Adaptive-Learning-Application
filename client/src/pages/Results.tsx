@@ -1,6 +1,6 @@
-import "./Home.css";
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import './Home.css';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type StoredResults = {
   subject: string;
@@ -15,16 +15,16 @@ function Results() {
   const [serverMessage, setServerMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const raw = localStorage.getItem("testResults");
+    const raw = localStorage.getItem('testResults');
     if (!raw) {
-      navigate("/");
+      navigate('/');
       return;
     }
     try {
       const parsed = JSON.parse(raw) as StoredResults;
       setData(parsed);
     } catch (error) {
-      navigate("/");
+      navigate('/');
     }
   }, [navigate]);
 
@@ -41,12 +41,12 @@ function Results() {
     }
     const sendResults = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/app/results", {
-          method: "POST",
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:8080/app/results', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            Authorization: token ? `Bearer ${token}` : "",
+            'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
           },
           body: JSON.stringify({
             correctness: data.results,
@@ -63,12 +63,12 @@ function Results() {
         if (payload.message) {
           setServerMessage(payload.message);
         } else if (response.ok) {
-          setServerMessage("Results submitted");
+          setServerMessage('Results submitted');
         } else {
-          setServerMessage("Unable to submit results.");
+          setServerMessage('Unable to submit results.');
         }
       } catch (error) {
-        setServerMessage("Unable to submit results.");
+        setServerMessage('Unable to submit results.');
       }
     };
 
@@ -88,7 +88,7 @@ function Results() {
         <div className="home__page">
           {data.subject} Results
           <div className="home__summary">
-            {serverMessage ?? "Submitting results..."}
+            {serverMessage ?? 'Submitting results...'}
           </div>
           <div className="home__summary">
             Correct answers: {correctCount} / {data.results.length}
@@ -99,7 +99,7 @@ function Results() {
             <div key={`result-${index}`} className="home__result-card">
               <div className="home__result-title">Question {index + 1}</div>
               <div className="home__result-row">
-                Result: {value === 1 ? "Correct" : "Wrong"}
+                Result: {value === 1 ? 'Correct' : 'Wrong'}
               </div>
               <div className="home__result-row">
                 Time: {data.timeTaken[index]}s
@@ -111,7 +111,7 @@ function Results() {
           ))}
         </div>
         <div className="home__results-actions">
-          <button className="home__button" onClick={() => navigate("/")}>
+          <button className="home__button" onClick={() => navigate('/')}>
             Home
           </button>
         </div>
