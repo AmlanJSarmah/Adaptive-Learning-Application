@@ -35,11 +35,14 @@ function English() {
 
     const load = async () => {
       try {
-        const response = await fetch('http://localhost:8080/app/english', {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-        });
+        const response = await fetch(
+          'https://adaptive-learning-application-main-api.onrender.com/app/english',
+          {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : '',
+            },
+          }
+        );
         const data = await response.json();
         const loadedProblems: Problem[] = Array.isArray(data?.problems)
           ? data.problems

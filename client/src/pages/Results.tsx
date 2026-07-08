@@ -42,18 +42,21 @@ function Results() {
     const sendResults = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/app/results', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-          body: JSON.stringify({
-            correctness: data.results,
-            attempts: data.attempts,
-            time_taken: data.timeTaken,
-          }),
-        });
+        const response = await fetch(
+          'https://adaptive-learning-application-main-api.onrender.com/app/results',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: token ? `Bearer ${token}` : '',
+            },
+            body: JSON.stringify({
+              correctness: data.results,
+              attempts: data.attempts,
+              time_taken: data.timeTaken,
+            }),
+          }
+        );
         let payload: { message?: string } = {};
         try {
           payload = await response.json();

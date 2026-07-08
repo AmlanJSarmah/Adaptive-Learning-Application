@@ -1,34 +1,37 @@
-import "./Home.css";
-import mathImage from "../../assets/math-removebg-preview.png";
-import literatureImage from "../../assets/literature-removebg-preview.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import './Home.css';
+import mathImage from '../../assets/math-removebg-preview.png';
+import literatureImage from '../../assets/literature-removebg-preview.png';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 function Login() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedName = name.trim();
     if (!trimmedName || !password.trim()) {
-      alert("Please enter your name and password.");
+      alert('Please enter your name and password.');
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: trimmedName,
-          password,
-        }),
-      });
+      const response = await fetch(
+        'https://adaptive-learning-application-main-api.onrender.com/user/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: trimmedName,
+            password,
+          }),
+        }
+      );
 
       let data: {
         message?: string;
@@ -43,23 +46,23 @@ function Login() {
       }
 
       if (response.ok) {
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("user", data.user ?? trimmedName);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('user', data.user ?? trimmedName);
         if (data.token) {
-          localStorage.setItem("token", data.token);
+          localStorage.setItem('token', data.token);
         } else {
-          localStorage.removeItem("token");
+          localStorage.removeItem('token');
         }
         if (data.studentClass !== undefined) {
-          localStorage.setItem("studentClass", String(data.studentClass));
+          localStorage.setItem('studentClass', String(data.studentClass));
         }
-        alert(data.message ?? "Login successful");
-        navigate("/");
+        alert(data.message ?? 'Login successful');
+        navigate('/');
       } else {
-        alert(data.message ?? "Login failed. Please try again.");
+        alert(data.message ?? 'Login failed. Please try again.');
       }
     } catch (error) {
-      alert("Login failed. Please try again.");
+      alert('Login failed. Please try again.');
     }
   };
 
@@ -84,7 +87,7 @@ function Login() {
               type="text"
               name="name"
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={event => setName(event.target.value)}
             />
           </label>
           <label className="home__field">
@@ -94,7 +97,7 @@ function Login() {
               type="password"
               name="password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={event => setPassword(event.target.value)}
             />
           </label>
           <button className="home__button home__submit" type="submit">
