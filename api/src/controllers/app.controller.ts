@@ -509,11 +509,14 @@ export const getResults = async (
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const predictResponse = await fetch('http://localhost:5000/predict', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(parsedResults),
-    });
+    const predictResponse = await fetch(
+      'https://adaptive-learning-application.onrender.com/predict',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsedResults),
+      }
+    );
 
     if (!predictResponse.ok) {
       return res.status(502).json({ message: 'Prediction service failed' });
