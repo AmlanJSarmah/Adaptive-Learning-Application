@@ -1,7 +1,14 @@
 # Adaptive Learning Application
 
+Live Demo : https://adaptive-learning-application.vercel.app/  
+
 For the EPICS (Engineering Project in Community Service) we are aiming to create an application that teaches students math and english concepts via quizes.  
 Below is the instruction to set up our project.
+
+## Walkthrough
+https://github.com/user-attachments/assets/15a17f1f-2413-41e2-9e5e-65597054259c
+
+
 
 
 ## Setting up the model API
